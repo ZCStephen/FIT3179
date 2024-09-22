@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vega-Lite Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+    <div id="vis"></div>
+    <script type="text/javascript">
+        var spec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "width": 800,
+            "height": 700,
+            "layer": [
+                {
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json",
+                        "format": { "property": "features" }
+                    },
+                    "mark": { "type": "geoshape", "fill": "#1e90ff", "opacity": 0.2 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
+                },
+                {
+                    "data": { "graticule": { "step": [10, 10] } },
+                    "mark": { "type": "geoshape", "stroke": "lightgray", "strokeWidth": 0.5 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
+                },
+                {
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+                        "format": { "property": "features" }
+                    },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
+                    "transform": [
+                        {
+                            "lookup": "properties.STATE_NAME",
+                            "from": {
+                                "data": {
+                                    "values": [
+                                        { "state": "New South Wales", "share": 24.5 },
+                                        { "state": "Victoria", "share": 19.9 },
+                                        { "state": "Queensland", "share": 24.5 },
+                                        { "state": "Western Australia", "share": 22 },
+                                        { "state": "South Australia", "share": 5.1 },
+                                        { "state": "Tasmania", "share": 1.8 },
+                                        { "state": "Northern Territory", "share": 2.2 }
+                                    ]
+                                },
+                                "key": "state",
+                                "fields": ["share"]
+                            }
+                        }
+                    ],
+                    "mark": "geoshape",
+                    "encoding": {
+                        "color": {
+                            "field": "share",
+                            "type": "quantitative",
+                            "scale": { "scheme": "blues" },
+                            "title": "Energy Share (%)"
+                        },
+                        "tooltip": [
+                            {
+                                "field": "properties.STATE_NAME",
+                                "type": "nominal",
+                                "title": "State"
+                            },
+                            {
+                                "field": "share",
+                                "type": "quantitative",
+                                "title": "Energy Share (%)"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "mark": { "type": "geoshape", "stroke": "black", "strokeWidth": 1 },
+                    "encoding": {
+                        "color": {
+                            "field": "properties.STATE_NAME",
+                            "type": "nominal",
+                            "title": "State"
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "values": [
+                            {
+                                "state": "New South Wales",
+                                "latitude": -32.8,
+                                "longitude": 146.5,
+                                "label": "NSW"
+                            },
+                            {
+                                "state": "Victoria",
+                                "latitude": -37.5,
+                                "longitude": 145,
+                                "label": "VIC"
+                            },
+                            {
+                                "state": "Queensland",
+                                "latitude": -25,
+                                "longitude": 145,
+                                "label": "QLD"
+                            },
+                            {
+                                "state": "Western Australia",
+                                "latitude": -26.3,
+                                "longitude": 122,
+                                "label": "WA"
+                            },
+                            {
+                                "state": "South Australia",
+                                "latitude": -30,
+                                "longitude": 135,
+                                "label": "SA"
+                            },
+                            {
+                                "state": "Tasmania",
+                                "latitude": -42.5,
+                                "longitude": 146.7,
+                                "label": "TAS"
+                            },
+                            {
+                                "state": "Northern Territory",
+                                "latitude": -21.4,
+                                "longitude": 133.6,
+                                "label": "NT"
+                            }
+                        ]
+                    },
+                    "mark": { "type": "text", "fontSize": 12, "fontWeight": "bold", "dy": -10 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
+                    "encoding": {
+                        "longitude": { "field": "longitude" },
+                        "latitude": { "field": "latitude" },
+                        "text": { "field": "label" }
+                    }
+                }
+            ],
+            "config": {}
+        };
+        vegaEmbed('#vis', spec);
+    </script>
+</body>
+
+</html>
