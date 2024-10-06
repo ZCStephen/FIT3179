@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +15,15 @@
             align-items: center;
             gap: 20px;
         }
-        #map, #chart {
+
+        #map,
+        #chart {
             width: 80%;
             max-width: 800px;
         }
     </style>
 </head>
+
 <body>
     <div id="vis-container">
         <div id="map"></div>
@@ -34,35 +38,35 @@
                 {
                     "data": {
                         "url": "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json",
-                        "format": {"property": "features"}
+                        "format": { "property": "features" }
                     },
-                    "mark": {"type": "geoshape", "fill": "#1e90ff", "opacity": 0.2},
-                    "projection": {"type": "mercator", "scale": 1000, "center": [132, -28]}
+                    "mark": { "type": "geoshape", "fill": "#1e90ff", "opacity": 0.2 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
                 },
                 {
-                    "data": {"graticule": {"step": [10, 10]}},
-                    "mark": {"type": "geoshape", "stroke": "lightgray", "strokeWidth": 0.5},
-                    "projection": {"type": "mercator", "scale": 1000, "center": [132, -28]}
+                    "data": { "graticule": { "step": [10, 10] } },
+                    "mark": { "type": "geoshape", "stroke": "lightgray", "strokeWidth": 0.5 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
                 },
                 {
                     "data": {
                         "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
-                        "format": {"property": "features"}
+                        "format": { "property": "features" }
                     },
-                    "projection": {"type": "mercator", "scale": 1000, "center": [132, -28]},
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
                     "transform": [
                         {
                             "lookup": "properties.STATE_NAME",
                             "from": {
                                 "data": {
                                     "values": [
-                                        {"state": "New South Wales", "share": 24.5},
-                                        {"state": "Victoria", "share": 19.9},
-                                        {"state": "Queensland", "share": 24.5},
-                                        {"state": "Western Australia", "share": 22},
-                                        {"state": "South Australia", "share": 5.1},
-                                        {"state": "Tasmania", "share": 1.8},
-                                        {"state": "Northern Territory", "share": 2.2}
+                                        { "state": "New South Wales", "share": 24.5 },
+                                        { "state": "Victoria", "share": 19.9 },
+                                        { "state": "Queensland", "share": 24.5 },
+                                        { "state": "Western Australia", "share": 22 },
+                                        { "state": "South Australia", "share": 5.1 },
+                                        { "state": "Tasmania", "share": 1.8 },
+                                        { "state": "Northern Territory", "share": 2.2 }
                                     ]
                                 },
                                 "key": "state",
@@ -75,7 +79,7 @@
                         "color": {
                             "field": "share",
                             "type": "quantitative",
-                            "scale": {"scheme": "blues"},
+                            "scale": { "scheme": "blues" },
                             "title": "Energy Share (%)"
                         },
                         "tooltip": [
@@ -93,7 +97,7 @@
                     }
                 },
                 {
-                    "mark": {"type": "geoshape", "stroke": "black", "strokeWidth": 1},
+                    "mark": { "type": "geoshape", "stroke": "black", "strokeWidth": 1 },
                     "encoding": {
                         "color": {
                             "field": "properties.STATE_NAME",
@@ -149,12 +153,12 @@
                             }
                         ]
                     },
-                    "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "dy": -10},
-                    "projection": {"type": "mercator", "scale": 1000, "center": [132, -28]},
+                    "mark": { "type": "text", "fontSize": 12, "fontWeight": "bold", "dy": -10 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
                     "encoding": {
-                        "longitude": {"field": "longitude"},
-                        "latitude": {"field": "latitude"},
-                        "text": {"field": "label"}
+                        "longitude": { "field": "longitude" },
+                        "latitude": { "field": "latitude" },
+                        "text": { "field": "label" }
                     }
                 }
             ]
@@ -162,17 +166,17 @@
 
         const chartSpec = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "width": 700,
-            "height": 400,
+            "width": 800,
+            "height": 700,
             "data": {
                 "values": [
-                    {"state": "New South Wales", "share": 24.5},
-                    {"state": "Victoria", "share": 19.9},
-                    {"state": "Queensland", "share": 24.5},
-                    {"state": "Western Australia", "share": 22},
-                    {"state": "South Australia", "share": 5.1},
-                    {"state": "Tasmania", "share": 1.8},
-                    {"state": "Northern Territory", "share": 2.2}
+                    { "state": "New South Wales", "share": 24.5 },
+                    { "state": "Victoria", "share": 19.9 },
+                    { "state": "Queensland", "share": 24.5 },
+                    { "state": "Western Australia", "share": 22 },
+                    { "state": "South Australia", "share": 5.1 },
+                    { "state": "Tasmania", "share": 1.8 },
+                    { "state": "Northern Territory", "share": 2.2 }
                 ]
             },
             "params": [
@@ -217,11 +221,11 @@
                         "y": {
                             "field": "share",
                             "type": "quantitative",
-                            "axis": {"title": "Renewable Energy Share (%)"}
+                            "axis": { "title": "Renewable Energy Share (%)" }
                         },
                         "tooltip": [
-                            {"field": "state", "type": "nominal", "title": "State"},
-                            {"field": "share", "type": "quantitative", "title": "Energy Share (%)"}
+                            { "field": "state", "type": "nominal", "title": "State" },
+                            { "field": "share", "type": "quantitative", "title": "Energy Share (%)" }
                         ]
                     }
                 },
@@ -235,14 +239,50 @@
                         "fontWeight": "bold"
                     },
                     "encoding": {
-                        "text": {"field": "share", "type": "quantitative"},
-                        "x": {"field": "state", "type": "nominal"},
-                        "y": {"field": "share", "type": "quantitative"}
+                        "text": { "field": "share", "type": "quantitative" },
+                        "x": { "field": "state", "type": "nominal" },
+                        "y": { "field": "share", "type": "quantitative" }
+                    }
+                },
+                {
+                    "transform": [
+                        { "filter": "stateFilter == 'All'" }
+                    ],
+                    "mark": {
+                        "type": "text",
+                        "align": "right",
+                        "baseline": "middle",
+                        "fontSize": 11,
+                        "fontStyle": "italic",
+                        "color": "darkred",
+                        "dx": -130,
+                        "dy": -350
+                    },
+                    "encoding": {
+                        "text": { "value": "Highest energy share states: NSW & QLD" }
+                    }
+                },
+                {
+                    "transform": [
+                        { "filter": "stateFilter == 'All'" }
+                    ],
+                    "mark": {
+                        "type": "text",
+                        "align": "right",
+                        "baseline": "middle",
+                        "fontSize": 11,
+                        "fontStyle": "italic",
+                        "color": "darkblue",
+                        "dx": 200,
+                        "dy": 270
+                    },
+                    "encoding": {
+                        "text": { "value": "Lowest energy share state: TAS" }
                     }
                 }
             ],
             "config": {
-                "view": {"stroke": "transparent"}
+                "view": { "stroke": "transparent" }
             }
         };
 
@@ -250,4 +290,5 @@
         vegaEmbed('#chart', chartSpec);
     </script>
 </body>
+
 </html>
