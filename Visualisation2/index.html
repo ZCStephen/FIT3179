@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Layout for Charts and Text</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+        /* Container for all charts and text blocks */
+        #charts-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* Create three equal-width columns */
+            grid-auto-rows: minmax(200px, auto);
+            /* Each row adjusts to the content */
+            gap: 20px;
+            /* Space between the grid items */
+            max-width: 1600px;
+            margin: auto;
+            /* Center the grid on the page */
+            padding: 20px;
+        }
+
+        /* Chart and text block styling */
+        .chart-card,
+        .text-space {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Make sure the chart placeholders take up full space */
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+
+        /* Assign specific grid placements to replicate the design */
+        .chart1 {
+            grid-column: 1 / 2;
+            /* First column */
+            grid-row: 1 / 2;
+            /* First row */
+        }
+
+        .text1 {
+            grid-column: 2 / 2;
+            /* Third column */
+            grid-row: 1 / 2;
+            /* First row */
+        }
+
+        .chart2 {
+            grid-column: 2 / 2;
+            /* Second column */
+            grid-row: 2 / 2;
+            /* Second row */
+        }
+
+        .text2 {
+            grid-column: 1 / 2;
+            /* First column */
+            grid-row: 2 / 3;
+            /* Second row */
+        }
+
+        .chart3 {
+            grid-column: 1 / span 2;
+            /* Spanning two columns */
+            grid-row: 3 / 4;
+            /* Third row */
+        }
+
+        .text3 {
+            grid-column: 3 / 4;
+            /* Third column */
+            grid-row: 2 / 3;
+            /* Third row */
+        }
+
+        .chart4 {
+            grid-column: 2 / 3;
+            /* Second column */
+            grid-row: 4 / 5;
+            /* Fourth row */
+        }
+
+        .text4 {
+            grid-column: 1 / 2;
+            /* First column */
+            grid-row: 4 / 5;
+            /* Fourth row */
+        }
+
+        .text5 {
+            grid-column: 3 / 4;
+            /* Third column */
+            grid-row: 4 / 5;
+            /* Fourth row */
+        }
+
+        .chart5 {
+            grid-column: 1 / 2;
+            /* First column */
+            grid-row: 5 / 6;
+            /* Fifth row */
+        }
+
+        .chart6 {
+            grid-column: 2 / 2;
+            /* Third column */
+            grid-row: 5 / 6;
+            /* Fifth row */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="charts-container">
+        <div class="chart-card chart1">
+            <div class="chart-title">Chart 1</div>
+            <div id="chart1" class="chart-placeholder"></div> <!-- Vega-Lite Chart 1 Placeholder -->
+        </div>
+        <div class="text-space text1">
+            <p>Text content for the first text block. This is where your explanatory text goes.</p>
+        </div>
+        <div class="text-space text2">
+            <p>Text content for the second text block.</p>
+        </div>
+        <div class="chart-card chart2">
+            <div class="chart-title">Chart 2</div>
+            <div id="chart2" class="chart-placeholder"></div> <!-- Vega-Lite Chart 2 Placeholder -->
+        </div>
+        <div class="chart-card chart3">
+            <div class="chart-title">Chart 3</div>
+            <div id="chart3" class="chart-placeholder"></div> <!-- Vega-Lite Chart 3 Placeholder -->
+        </div>
+        <div class="text-space text3">
+            <p>Text content for the third text block.</p>
+        </div>
+        <div class="chart-card chart4">
+            <div class="chart-title">Chart 4</div>
+            <div id="chart4" class="chart-placeholder"></div> <!-- Vega-Lite Chart 4 Placeholder -->
+        </div>
+        <div class="text-space text4">
+            <p>Text content for the fourth text block.</p>
+        </div>
+        <div class="text-space text5">
+            <p>Text content for the fifth text block.</p>
+        </div>
+        <div class="chart-card chart5">
+            <div class="chart-title">Chart 5</div>
+            <div id="chart5" class="chart-placeholder"></div> <!-- Vega-Lite Chart 5 Placeholder -->
+        </div>
+        <div class="chart-card chart6">
+            <div class="chart-title">Chart 6</div>
+            <div id="chart6" class="chart-placeholder"></div> <!-- Vega-Lite Chart 6 Placeholder -->
+        </div>
+    </div>
+
+    <script>
+        // Example Vega-Lite spec for Chart 1
+        const chart1Spec =
+        {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "width": 750,
+            "height": 700,
+            "data": {
+                "url": "https://raw.githubusercontent.com/ZCStephen/FIT3179/refs/heads/main/Visualisation2/AU_PowerPlant_Database.csv",
+                "format": { "type": "csv" }
+            },
+            "layer": [
+                {
+                    "mark": "geoshape",
+                    "projection": { "type": "mercator" },
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+                        "format": { "type": "topojson" }
+                    },
+                    "encoding": { "color": { "value": "#e0e0e0" } }
+                },
+                {
+                    "mark": "circle",
+                    "encoding": {
+                        "longitude": { "field": "longitude", "type": "quantitative" },
+                        "latitude": { "field": "latitude", "type": "quantitative" },
+                        "size": {
+                            "field": "capacity_mw",
+                            "type": "quantitative",
+                            "title": "Capacity (MW)",
+                            "scale": { "range": [10, 1000] }
+                        },
+                        "color": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "legend": { "title": "Energy Source" }
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "highlight",
+                                "value": 1
+                            },
+                            "value": 0.2
+                        },
+                        "tooltip": [
+                            {
+                                "field": "powerplant_name",
+                                "type": "nominal",
+                                "title": "Power Plant Name"
+                            },
+                            { "field": "primary_fuel", "type": "nominal", "title": "Fuel Type" },
+                            {
+                                "field": "capacity_mw",
+                                "type": "quantitative",
+                                "title": "Capacity (MW)"
+                            }
+                        ]
+                    },
+                    "params": [
+                        {
+                            "name": "highlight",
+                            "select": {
+                                "type": "point",
+                                "fields": ["primary_fuel"],
+                                "toggle": true,
+                                "on": "click"
+                            },
+                            "bind": "legend"
+                        }
+                    ]
+                }
+            ],
+            "title": "Geographical Distribution of Power Plants in Australia by Energy Source",
+            "config": {
+                "stroke": "transparent"
+            }
+        };
+
+        // Embed the first Vega-Lite chart
+        vegaEmbed('#chart1', chart1Spec).catch(console.error);
+
+        // Add more vegaEmbed calls for the other charts similarly
+        const chart2Spec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "width": 800,
+            "height": 700,
+            "layer": [
+                {
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json",
+                        "format": { "property": "features" }
+                    },
+                    "mark": { "type": "geoshape", "fill": "#1e90ff", "opacity": 0.2 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
+                },
+                {
+                    "data": { "graticule": { "step": [10, 10] } },
+                    "mark": { "type": "geoshape", "stroke": "lightgray", "strokeWidth": 0.5 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] }
+                },
+                {
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+                        "format": { "property": "features" }
+                    },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
+                    "transform": [
+                        {
+                            "lookup": "properties.STATE_NAME",
+                            "from": {
+                                "data": {
+                                    "values": [
+                                        { "state": "New South Wales", "share": 24.5 },
+                                        { "state": "Victoria", "share": 19.9 },
+                                        { "state": "Queensland", "share": 24.5 },
+                                        { "state": "Western Australia", "share": 22 },
+                                        { "state": "South Australia", "share": 5.1 },
+                                        { "state": "Tasmania", "share": 1.8 },
+                                        { "state": "Northern Territory", "share": 2.2 }
+                                    ]
+                                },
+                                "key": "state",
+                                "fields": ["share"]
+                            }
+                        }
+                    ],
+                    "mark": "geoshape",
+                    "encoding": {
+                        "color": {
+                            "field": "share",
+                            "type": "quantitative",
+                            "scale": { "scheme": "greens" },
+                            "title": "Energy Share (%)"
+                        },
+                        "tooltip": [
+                            {
+                                "field": "properties.STATE_NAME",
+                                "type": "nominal",
+                                "title": "State"
+                            },
+                            {
+                                "field": "share",
+                                "type": "quantitative",
+                                "title": "Energy Share (%)"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "mark": { "type": "geoshape", "stroke": "black", "strokeWidth": 1 },
+                    "encoding": {
+                        "color": {
+                            "field": "properties.STATE_NAME",
+                            "type": "nominal",
+                            "title": "State"
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "values": [
+                            {
+                                "state": "New South Wales",
+                                "latitude": -32.8,
+                                "longitude": 146.5,
+                                "label": "NSW"
+                            },
+                            {
+                                "state": "Victoria",
+                                "latitude": -37.5,
+                                "longitude": 145,
+                                "label": "VIC"
+                            },
+                            {
+                                "state": "Queensland",
+                                "latitude": -25,
+                                "longitude": 145,
+                                "label": "QLD"
+                            },
+                            {
+                                "state": "Western Australia",
+                                "latitude": -26.3,
+                                "longitude": 122,
+                                "label": "WA"
+                            },
+                            {
+                                "state": "South Australia",
+                                "latitude": -30,
+                                "longitude": 135,
+                                "label": "SA"
+                            },
+                            {
+                                "state": "Tasmania",
+                                "latitude": -42.5,
+                                "longitude": 146.7,
+                                "label": "TAS"
+                            },
+                            {
+                                "state": "Northern Territory",
+                                "latitude": -21.4,
+                                "longitude": 133.6,
+                                "label": "NT"
+                            }
+                        ]
+                    },
+                    "mark": { "type": "text", "fontSize": 12, "fontWeight": "bold", "dy": -10 },
+                    "projection": { "type": "mercator", "scale": 1000, "center": [132, -28] },
+                    "encoding": {
+                        "longitude": { "field": "longitude" },
+                        "latitude": { "field": "latitude" },
+                        "text": { "field": "label" }
+                    }
+                }
+            ]
+        };
+
+        // Embed the second Vega-Lite chart in #chart2
+        vegaEmbed('#chart2', chart2Spec).catch(console.error);
+
+        const chart3Spec =                 {
+                    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/ZCStephen/FIT3179/refs/heads/main/Visualisation2/AU_PowerPlant_Database.csv"
+                    },
+                    "width": "container",
+                    "height": "container",
+                    "mark": "bar",
+                    "encoding": {
+                        "x": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "sort": "-y",
+                            "axis": { "labelAngle": 0 }
+                        },
+                        "y": {
+                            "field": "capacity_mw",
+                            "type": "quantitative",
+                            "aggregate": "sum",
+                            "title": "Total Capacity (MW)"
+                        },
+                        "color": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "legend": {
+                                "title": "Energy Source"
+                            }
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "highlight",
+                                "value": 1
+                            },
+                            "value": 0.2
+                        }
+                    },
+                    "params": [
+                        {
+                            "name": "highlight",
+                            "select": {
+                                "type": "point",
+                                "fields": ["primary_fuel"],
+                                "toggle": true,
+                                "on": "click"
+                            },
+                            "bind": "legend"
+                        }
+                    ],
+                    "title": "Total Installed Capacity by Energy Source",
+                    "config": {
+                        "view": {
+                            "stroke": "transparent"
+                        }
+                    }
+                };
+
+        // Embed the second Vega-Lite chart in #chart2
+        vegaEmbed('#chart3', chart3Spec).catch(console.error);
+
+        const chart4Spec =                 {
+                    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/ZCStephen/FIT3179/refs/heads/main/Visualisation2/AU_PowerPlant_Database.csv",
+                        "format": {
+                            "type": "csv"
+                        }
+                    },
+                    "transform": [
+                        {
+                            "filter": "datum.primary_fuel != null"
+                        }
+                    ],
+                    "mark": {
+                        "type": "arc",
+                        "innerRadius": 50
+                    },
+                    "encoding": {
+                        "theta": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "aggregate": "count",
+                            "title": "Number of Power Plants"
+                        },
+                        "color": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "legend": {
+                                "title": "Energy Source"
+                            }
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "highlight",
+                                "value": 1
+                            },
+                            "value": 0.2
+                        },
+                        "tooltip": [
+                            {
+                                "field": "primary_fuel",
+                                "type": "nominal",
+                                "title": "Energy Source"
+                            },
+                            {
+                                "field": "primary_fuel",
+                                "type": "quantitative",
+                                "aggregate": "count",
+                                "title": "Number of Power Plants"
+                            }
+                        ]
+                    },
+                    "params": [
+                        {
+                            "name": "highlight",
+                            "select": {
+                                "type": "point",
+                                "fields": ["primary_fuel"],
+                                "toggle": true,
+                                "on": "click"
+                            },
+                            "bind": "legend"
+                        }
+                    ],
+                    "title": "Proportion of Power Plants by Energy Source",
+                    "config": {
+                        "view": {
+                            "stroke": "transparent"
+                        },
+                        "arc": {
+                            "cornerRadius": 4
+                        },
+                        "legend": {
+                            "titleFontSize": 14,
+                            "labelFontSize": 12
+                        }
+                    }
+                };
+        vegaEmbed('#chart4', chart4Spec).catch(console.error);     
+
+        const chart5Spec =                {
+                    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                    "width": "container",
+                    "height": "container",
+                    "data": {
+                        "url": "https://raw.githubusercontent.com/ZCStephen/FIT3179/refs/heads/main/Visualisation2/AU_PowerPlant_Database.csv",
+                        "format": {
+                            "type": "csv"
+                        }
+                    },
+                    "mark": "bar",
+                    "encoding": {
+                        "x": {
+                            "field": "year",
+                            "type": "ordinal",
+                            "title": "Year",
+                            "axis": {
+                                "labelAngle": -45
+                            }
+                        },
+                        "y": {
+                            "aggregate": "sum",
+                            "field": "generation_gwh",
+                            "type": "quantitative",
+                            "title": "Total Generation (GWh)"
+                        },
+                        "color": {
+                            "field": "primary_fuel",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "legend": {
+                                "title": "Energy Source"
+                            }
+                        },
+                        "opacity": {
+                            "condition": {
+                                "param": "highlight",
+                                "value": 1
+                            },
+                            "value": 0.2
+                        },
+                        "tooltip": [
+                            {
+                                "field": "year",
+                                "type": "ordinal",
+                                "title": "Year"
+                            },
+                            {
+                                "field": "primary_fuel",
+                                "type": "nominal",
+                                "title": "Energy Source"
+                            },
+                            {
+                                "aggregate": "sum",
+                                "field": "generation_gwh",
+                                "type": "quantitative",
+                                "title": "Total Generation (GWh)"
+                            }
+                        ]
+                    },
+                    "params": [
+                        {
+                            "name": "highlight",
+                            "select": {
+                                "type": "point",
+                                "fields": ["primary_fuel"],
+                                "toggle": true,
+                                "on": "click"
+                            },
+                            "bind": "legend"
+                        }
+                    ],
+                    "transform": [
+                        {
+                            "fold": [
+                                "generation_gwh_2013",
+                                "generation_gwh_2014",
+                                "generation_gwh_2015",
+                                "generation_gwh_2016",
+                                "generation_gwh_2017"
+                            ],
+                            "as": ["year", "generation_gwh"]
+                        }
+                    ],
+                    "title": "Total Energy Generation by Fuel Type (2013-2017)",
+                    "config": {
+                        "view": {
+                            "stroke": "transparent"
+                        },
+                        "legend": {
+                            "titleFontSize": 14,
+                            "labelFontSize": 12
+                        }
+                    }
+                };
+
+        vegaEmbed('#chart5', chart5Spec).catch(console.error);  
+
+        const chart6Spec =                 {
+                    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                    "width": "container",
+                    "height": "container",
+                    "data": {
+                        "values": [
+                            { "year": "1998-99", "source": "Hydro", "generation": 16563 },
+                            { "year": "1998-99", "source": "Wind", "generation": 28 },
+                            { "year": "1998-99", "source": "Solar", "generation": 37.7 },
+                            { "year": "1998-99", "source": "Bioenergy", "generation": 1133 },
+                            { "year": "1999-00", "source": "Hydro", "generation": 16720 },
+                            { "year": "1999-00", "source": "Wind", "generation": 58 },
+                            { "year": "1999-00", "source": "Solar", "generation": 43.5 },
+                            { "year": "1999-00", "source": "Bioenergy", "generation": 1134 },
+                            { "year": "2000-01", "source": "Hydro", "generation": 16933 },
+                            { "year": "2000-01", "source": "Wind", "generation": 210 },
+                            { "year": "2000-01", "source": "Solar", "generation": 50 },
+                            { "year": "2000-01", "source": "Bioenergy", "generation": 645 },
+                            { "year": "2001-02", "source": "Hydro", "generation": 16054 },
+                            { "year": "2001-02", "source": "Wind", "generation": 364 },
+                            { "year": "2001-02", "source": "Solar", "generation": 58.3 },
+                            { "year": "2001-02", "source": "Bioenergy", "generation": 950 },
+                            { "year": "2002-03", "source": "Hydro", "generation": 16490 },
+                            { "year": "2002-03", "source": "Wind", "generation": 703.1 },
+                            { "year": "2002-03", "source": "Solar", "generation": 58.3 },
+                            { "year": "2002-03", "source": "Bioenergy", "generation": 1583.6 },
+                            { "year": "2003-04", "source": "Hydro", "generation": 16331.1 },
+                            { "year": "2003-04", "source": "Wind", "generation": 705 },
+                            { "year": "2003-04", "source": "Solar", "generation": 68.1 },
+                            { "year": "2003-04", "source": "Bioenergy", "generation": 1799.5 },
+                            { "year": "2004-05", "source": "Hydro", "generation": 15612.2 },
+                            { "year": "2004-05", "source": "Wind", "generation": 885 },
+                            { "year": "2004-05", "source": "Solar", "generation": 77.8 },
+                            { "year": "2004-05", "source": "Bioenergy", "generation": 3830 },
+                            { "year": "2005-06", "source": "Hydro", "generation": 16029.2 },
+                            { "year": "2005-06", "source": "Wind", "generation": 1713.1 },
+                            { "year": "2005-06", "source": "Solar", "generation": 90.3 },
+                            { "year": "2005-06", "source": "Bioenergy", "generation": 3911 },
+                            { "year": "2006-07", "source": "Hydro", "generation": 14517 },
+                            { "year": "2006-07", "source": "Wind", "generation": 2611.1 },
+                            { "year": "2006-07", "source": "Solar", "generation": 104.7 },
+                            { "year": "2006-07", "source": "Bioenergy", "generation": 3953 },
+                            { "year": "2007-08", "source": "Hydro", "generation": 12056.9 },
+                            { "year": "2007-08", "source": "Wind", "generation": 3093.1 },
+                            { "year": "2007-08", "source": "Solar", "generation": 122.8 },
+                            { "year": "2007-08", "source": "Bioenergy", "generation": 4596 },
+                            { "year": "2008-09", "source": "Hydro", "generation": 11869.4 },
+                            { "year": "2008-09", "source": "Wind", "generation": 3823.8 },
+                            { "year": "2008-09", "source": "Solar", "generation": 155.6 },
+                            { "year": "2008-09", "source": "Bioenergy", "generation": 2795.2 },
+                            { "year": "2009-10", "source": "Hydro", "generation": 13548.7 },
+                            { "year": "2009-10", "source": "Wind", "generation": 5051.7 },
+                            { "year": "2009-10", "source": "Solar", "generation": 424.8 },
+                            { "year": "2009-10", "source": "Bioenergy", "generation": 2777.4 },
+                            { "year": "2010-11", "source": "Hydro", "generation": 16806.7 },
+                            { "year": "2010-11", "source": "Wind", "generation": 6084.9 },
+                            { "year": "2010-11", "source": "Solar", "generation": 1530.5 },
+                            { "year": "2010-11", "source": "Bioenergy", "generation": 2101.7 },
+                            { "year": "2011-12", "source": "Hydro", "generation": 14083.3 },
+                            { "year": "2011-12", "source": "Wind", "generation": 6969.8 },
+                            { "year": "2011-12", "source": "Solar", "generation": 2558.6 },
+                            { "year": "2011-12", "source": "Bioenergy", "generation": 3043.7 },
+                            { "year": "2012-13", "source": "Hydro", "generation": 18269.6 },
+                            { "year": "2012-13", "source": "Wind", "generation": 7959.6 },
+                            { "year": "2012-13", "source": "Solar", "generation": 3826.2 },
+                            { "year": "2012-13", "source": "Bioenergy", "generation": 3143.5 },
+                            { "year": "2013-14", "source": "Hydro", "generation": 15285 },
+                            { "year": "2013-14", "source": "Wind", "generation": 8835 },
+                            { "year": "2013-14", "source": "Solar", "generation": 5570 },
+                            { "year": "2013-14", "source": "Bioenergy", "generation": 3514.3 },
+                            { "year": "2014-15", "source": "Hydro", "generation": 13445 },
+                            { "year": "2014-15", "source": "Wind", "generation": 11466.5 },
+                            { "year": "2014-15", "source": "Solar", "generation": 5531.3 },
+                            { "year": "2014-15", "source": "Bioenergy", "generation": 3592.2 },
+                            { "year": "2015-16", "source": "Hydro", "generation": 15318.2 },
+                            { "year": "2015-16", "source": "Wind", "generation": 12199.5 },
+                            { "year": "2015-16", "source": "Solar", "generation": 6838.3 },
+                            { "year": "2015-16", "source": "Bioenergy", "generation": 3789.9 },
+                            { "year": "2016-17", "source": "Hydro", "generation": 16284.9 },
+                            { "year": "2016-17", "source": "Wind", "generation": 12597 },
+                            { "year": "2016-17", "source": "Solar", "generation": 8071.7 },
+                            { "year": "2016-17", "source": "Bioenergy", "generation": 3500.5 },
+                            { "year": "2017-18", "source": "Hydro", "generation": 16020.8 },
+                            { "year": "2017-18", "source": "Wind", "generation": 15174.4 },
+                            { "year": "2017-18", "source": "Solar", "generation": 9929.9 },
+                            { "year": "2017-18", "source": "Bioenergy", "generation": 3517.7 },
+                            { "year": "2018-19", "source": "Hydro", "generation": 15967.3 },
+                            { "year": "2018-19", "source": "Wind", "generation": 17712 },
+                            { "year": "2018-19", "source": "Solar", "generation": 14848.5 },
+                            { "year": "2018-19", "source": "Bioenergy", "generation": 3495.9 },
+                            { "year": "2019-20", "source": "Hydro", "generation": 15149.6 },
+                            { "year": "2019-20", "source": "Wind", "generation": 20395.9 },
+                            { "year": "2019-20", "source": "Solar", "generation": 21033.2 },
+                            { "year": "2019-20", "source": "Bioenergy", "generation": 3351.6 },
+                            { "year": "2020-21", "source": "Hydro", "generation": 15199.7 },
+                            { "year": "2020-21", "source": "Wind", "generation": 24535.4 },
+                            { "year": "2020-21", "source": "Solar", "generation": 27717 },
+                            { "year": "2020-21", "source": "Bioenergy", "generation": 3346.2 },
+                            { "year": "2022-23", "source": "Hydro", "generation": 16666.1 },
+                            { "year": "2022-23", "source": "Wind", "generation": 31384.9 },
+                            { "year": "2022-23", "source": "Solar", "generation": 41968.5 },
+                            { "year": "2022-23", "source": "Bioenergy", "generation": 3092.8 }
+                        ]
+                    },
+                    "mark": { "type": "area", "interpolate": "monotone" },
+                    "encoding": {
+                        "x": {
+                            "field": "year",
+                            "type": "nominal",
+                            "title": "Year",
+                            "axis": { "labelAngle": 45 }
+                        },
+                        "y": {
+                            "field": "generation",
+                            "type": "quantitative",
+                            "title": "Electricity Generation (GWh)"
+                        },
+                        "color": {
+                            "field": "source",
+                            "type": "nominal",
+                            "title": "Energy Source",
+                            "legend": { "orient": "bottom" }
+                        },
+                        "tooltip": [
+                            { "field": "year", "type": "nominal", "title": "Year" },
+                            { "field": "source", "type": "nominal", "title": "Energy Source" },
+                            {
+                                "field": "generation",
+                                "type": "quantitative",
+                                "title": "Generation (GWh)"
+                            }
+                        ],
+                        "layer": [
+                            {
+                                "mark": {
+                                    "type": "text",
+                                    "align": "left",
+                                    "baseline": "middle",
+                                    "dx": 10,
+                                    "dy": -180,
+                                    "fontSize": 12,
+                                    "fontWeight": "bold",
+                                    "color": "darkred"
+                                },
+                                "encoding": {
+                                    "text": {
+                                        "value": "Hydro remained a key source of renewable energy throughout the years."
+                                    },
+                                    "x": { "value": 2 },
+                                    "y": { "value": 30000 }
+                                }
+                            },
+                            {
+                                "mark": {
+                                    "type": "text",
+                                    "align": "left",
+                                    "baseline": "middle",
+                                    "dx": 200,
+                                    "dy": 180,
+                                    "fontSize": 12,
+                                    "fontWeight": "bold",
+                                    "color": "darkblue"
+                                },
+                                "encoding": {
+                                    "text": {
+                                        "value": "Recent years saw significant growth in Solar and Wind energy."
+                                    },
+                                    "x": { "value": 18 },
+                                    "y": { "value": 60000 }
+                                }
+                            },
+                            {
+                                "mark": {
+                                    "type": "text",
+                                    "align": "left",
+                                    "baseline": "middle",
+                                    "dx": 200,
+                                    "dy": 200,
+                                    "fontSize": 12,
+                                    "fontWeight": "bold",
+                                    "color": "darkblue"
+                                }
+                            },
+                            "config",
+                            "area",
+                            "opacity",
+                            "legend",
+                            "labelFontSize",
+                            "axis"
+                        ]
+                    }
+                };
+
+        vegaEmbed('#chart6', chart6Spec).catch(console.error);  
+    </script>
+
+</body>
+
+</html>
